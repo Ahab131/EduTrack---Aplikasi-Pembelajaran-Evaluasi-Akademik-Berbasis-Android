@@ -8,21 +8,14 @@ class ClassController {
 
   // 1. GET: Mengambil data real-time (Stream)
   Stream<List<KelasModel>> getClasses() {
-    return classCollection
-        .orderBy(
-          'urutan',
-          descending: false,
-        ) // Urutkan berdasarkan nomor urut (1, 2, 3...)
-        .snapshots()
-        .map((snapshot) {
-          return snapshot.docs.map((doc) {
-            // Konversi dari dokumen Firestore ke Object KelasModel
-            return KelasModel.fromMap(
-              doc.data() as Map<String, dynamic>,
-              doc.id,
-            );
-          }).toList();
-        });
+    return classCollection.orderBy('urutan', descending: true).snapshots().map(
+      (snapshot) {
+        return snapshot.docs.map((doc) {
+          // Konversi dari dokumen Firestore ke Object KelasModel
+          return KelasModel.fromMap(doc.data() as Map<String, dynamic>, doc.id);
+        }).toList();
+      },
+    );
   }
 
   // 2. CREATE: Menambah kelas baru

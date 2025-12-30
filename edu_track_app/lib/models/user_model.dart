@@ -2,10 +2,10 @@ class UserModel {
   final String uid;
   final String email;
   final String nama;
-  final String role;
+  final String role; // 'admin', 'pelajar', 'guru'
   final String? fotoUrl;
-  final String? alamat; 
-  final String? tanggalLahir;
+  final String? kelas; // <--- TAMBAHAN BARU
+  final String? noHp;  // <--- TAMBAHAN BARU
 
   UserModel({
     required this.uid,
@@ -13,25 +13,24 @@ class UserModel {
     required this.nama,
     required this.role,
     this.fotoUrl,
-    this.alamat,
-    this.tanggalLahir,
+    this.kelas,
+    this.noHp,
   });
 
-  // 1. Mengubah Data dari Firestore (Map) ke Object Dart
+  // Konversi dari Firestore ke Model
   factory UserModel.fromMap(Map<String, dynamic> data) {
     return UserModel(
       uid: data['uid'] ?? '',
       email: data['email'] ?? '',
-      nama: data['nama_lengkap'] ?? 'Tanpa Nama',
+      nama: data['nama_lengkap'] ?? '', // Pastikan key-nya 'nama_lengkap' sesuai database
       role: data['role'] ?? 'pelajar',
       fotoUrl: data['foto_url'],
-      alamat: data['alamat'], 
-      tanggalLahir: data['tanggal_lahir'],
+      kelas: data['kelas'], // <--- BACA DARI DB
+      noHp: data['no_hp'],  // <--- BACA DARI DB
     );
   }
 
-  // 2. Mengubah Object Dart ke format Firestore (Map)
-  // Dipakai saat menyimpan data user baru
+  // Konversi dari Model ke Firestore
   Map<String, dynamic> toMap() {
     return {
       'uid': uid,
@@ -39,9 +38,8 @@ class UserModel {
       'nama_lengkap': nama,
       'role': role,
       'foto_url': fotoUrl,
-      'alamat': alamat,
-      'tanggal_lahir': tanggalLahir,
-      'last_login': DateTime.now(),
+      'kelas': kelas, // <--- SIMPAN KE DB
+      'no_hp': noHp,  // <--- SIMPAN KE DB
     };
   }
 }

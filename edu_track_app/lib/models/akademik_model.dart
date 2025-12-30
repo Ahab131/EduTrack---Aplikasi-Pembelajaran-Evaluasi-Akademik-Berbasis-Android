@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class KelasModel {
   final String id;
   final String namaKelas; // Contoh: "Kelas 6 SD"
@@ -136,6 +138,45 @@ class SoalModel {
       'pilihan_d': pilihanD,
       'kunci_jawaban': kunciJawaban,
       'materi_id': materiId,
+    };
+  }
+}
+
+class NilaiModel {
+  final String id;
+  final String siswaId;    // ID Siswa yang mengerjakan
+  final String materiId;   // ID Materi
+  final String judulMateri; // Nama Materi (disimpan biar tidak perlu query ulang)
+  final int nilai;         // Skor (0-100)
+  final DateTime tanggal;  // Waktu pengerjaan
+
+  NilaiModel({
+    required this.id,
+    required this.siswaId,
+    required this.materiId,
+    required this.judulMateri,
+    required this.nilai,
+    required this.tanggal,
+  });
+
+  factory NilaiModel.fromMap(Map<String, dynamic> data, String docId) {
+    return NilaiModel(
+      id: docId,
+      siswaId: data['siswa_id'] ?? '',
+      materiId: data['materi_id'] ?? '',
+      judulMateri: data['judul_materi'] ?? 'Materi',
+      nilai: data['nilai'] ?? 0,
+      tanggal: (data['tanggal'] as Timestamp).toDate(),
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'siswa_id': siswaId,
+      'materi_id': materiId,
+      'judul_materi': judulMateri,
+      'nilai': nilai,
+      'tanggal': tanggal,
     };
   }
 }
