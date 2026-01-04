@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../controllers/soal_controller.dart'; // Pastikan path controller benar
+import '../../controllers/soal_controller.dart';
 import '../../models/akademik_model.dart';
 import '../../controllers/nilai_controller.dart';
 
@@ -24,7 +24,7 @@ class _QuizStudentPageState extends State<QuizStudentPage> {
   String? _selectedAnswer;
   bool _isFinished = false;
 
-  // List soal (akan diisi dari stream)
+  // List soal
   List<SoalModel> _questions = [];
 
   @override
@@ -44,7 +44,7 @@ class _QuizStudentPageState extends State<QuizStudentPage> {
             return _buildEmptyState();
           }
 
-          // 3. Data Ada - Simpan ke variabel lokal agar tidak refresh terus
+          // 3. Ada Data Soal
           if (_questions.isEmpty) {
             _questions = snapshot.data!;
           }
@@ -289,7 +289,7 @@ class _QuizStudentPageState extends State<QuizStudentPage> {
 
   // --- TAMPILAN HASIL SKOR ---
   Widget _buildResultScreen() {
-    // Hitung Nilai (Skala 100)
+
     double finalScore = (_score / _questions.length) * 100;
 
     return Scaffold(
@@ -338,7 +338,7 @@ class _QuizStudentPageState extends State<QuizStudentPage> {
                     ),
                   ),
                   onPressed: () =>
-                      Navigator.pop(context), // Kembali ke Detail Materi
+                      Navigator.pop(context),
                   child: const Text(
                     "Kembali ke Materi",
                     style: TextStyle(color: Colors.white),

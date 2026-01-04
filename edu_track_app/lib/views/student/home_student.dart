@@ -172,9 +172,7 @@ class _HomeStudentState extends State<HomeStudent> {
       ),
       child: Column(
         children: [
-          // GANTI STREAMBUILDER KE FIRESTORE
           StreamBuilder<DocumentSnapshot>(
-            // Mendengarkan perubahan di dokumen user di database
             stream: FirebaseFirestore.instance
                 .collection('users')
                 .doc(currentUser?.uid)
@@ -185,11 +183,9 @@ class _HomeStudentState extends State<HomeStudent> {
               String? photoUrl = currentUser?.photoURL;
               String status = "Pelajar";
 
-              // Jika data ada di Firestore, pakai data itu
               if (snapshot.hasData && snapshot.data != null && snapshot.data!.exists) {
                 final data = snapshot.data!.data() as Map<String, dynamic>;
                 displayName = data['nama_lengkap'] ?? currentUser?.displayName ?? "Nama Siswa";
-                // Jika ada field kelas, tampilkan kelasnya juga
                 if (data['kelas'] != null && data['kelas'].toString().isNotEmpty) {
                   status = "Kelas ${data['kelas']}";
                 }
@@ -204,7 +200,7 @@ class _HomeStudentState extends State<HomeStudent> {
                 ),
                 margin: EdgeInsets.zero,
                 
-                // Foto Profil (Tetap dari Google)
+                // Foto Profil
                 currentAccountPicture: CircleAvatar(
                   backgroundColor: Colors.white,
                   backgroundImage: photoUrl != null
@@ -215,7 +211,7 @@ class _HomeStudentState extends State<HomeStudent> {
                       : null,
                 ),
                 
-                // Nama dari Firestore (Sesuai Form)
+                // Nama dari Firestore
                 accountName: Text(
                   displayName,
                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
@@ -241,7 +237,7 @@ class _HomeStudentState extends State<HomeStudent> {
             () => Navigator.pop(context),
           ),
           _menuItem(Icons.history_edu_rounded, "Riwayat Nilai", () {
-            Navigator.pop(context); // Tutup drawer dulu
+            Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const HistoryScorePage()),
@@ -249,7 +245,7 @@ class _HomeStudentState extends State<HomeStudent> {
           }),
 
           _menuItem(Icons.settings_rounded, "Pengaturan Akun", () {
-            Navigator.pop(context); // Tutup drawer
+            Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const StudentSettingsPage()),

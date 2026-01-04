@@ -13,7 +13,7 @@ class StudentSubjectPage extends StatefulWidget {
 }
 
 class _StudentSubjectPageState extends State<StudentSubjectPage> {
-  final Color headerColor = const Color(0xFF001144); // Warna Biru Gelap
+  final Color headerColor = const Color(0xFF001144);
   final SubjectController _subjectController = SubjectController();
 
   @override
@@ -25,10 +25,9 @@ class _StudentSubjectPageState extends State<StudentSubjectPage> {
           /// ================= HEADER KOTAK =================
           Container(
             height: 120, 
-            width: double.infinity, // Lebar penuh
+            width: double.infinity,
             decoration: BoxDecoration(
               color: headerColor,
-              // Tidak ada borderRadius, jadi bentuknya kotak
             ),
             child: SafeArea(
               child: Padding(
@@ -60,7 +59,7 @@ class _StudentSubjectPageState extends State<StudentSubjectPage> {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            widget.kelas.namaKelas, // Info Kelas
+                            widget.kelas.namaKelas, 
                             style: const TextStyle(
                               fontSize: 14,
                               color: Colors.white70,
@@ -121,7 +120,6 @@ class _StudentSubjectPageState extends State<StudentSubjectPage> {
 
   /// ================= KARTU MAPEL (Card) =================
   Widget _buildMapelCard(MapelModel mapel, int index) {
-    // Variasi warna ikon
     final List<Color> colors = [Colors.blue, Colors.orange, Colors.purple, Colors.green, Colors.red];
     final Color iconColor = colors[index % colors.length];
 
@@ -129,7 +127,7 @@ class _StudentSubjectPageState extends State<StudentSubjectPage> {
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8), // Sudut card sedikit melengkung agar rapi
+        borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -146,7 +144,6 @@ class _StudentSubjectPageState extends State<StudentSubjectPage> {
              MaterialPageRoute(builder: (_) => StudentMaterialPage(mapel: mapel)),
           );
         },
-        // Icon di Kiri
         leading: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
@@ -155,17 +152,14 @@ class _StudentSubjectPageState extends State<StudentSubjectPage> {
           ),
           child: Icon(Icons.book, color: iconColor),
         ),
-        // Nama Mapel
         title: Text(
           mapel.namaMapel,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
-        // Kategori Mapel
         subtitle: Text(
           mapel.kategori,
           style: TextStyle(color: Colors.grey[600], fontSize: 12),
         ),
-        // Panah di Kanan
         trailing: const Icon(Icons.chevron_right, color: Colors.grey),
       ),
     );

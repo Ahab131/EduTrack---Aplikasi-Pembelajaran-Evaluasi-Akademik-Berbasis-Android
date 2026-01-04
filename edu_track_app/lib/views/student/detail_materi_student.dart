@@ -12,7 +12,7 @@ class DetailMateriStudent extends StatefulWidget {
 }
 
 class _DetailMateriStudentState extends State<DetailMateriStudent> {
-  final Color headerColor = const Color(0xFF001144); // Warna Biru Gelap
+  final Color headerColor = const Color(0xFF001144);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,6 @@ class _DetailMateriStudentState extends State<DetailMateriStudent> {
             width: double.infinity,
             decoration: BoxDecoration(
               color: headerColor,
-              // Kotak tanpa radius
             ),
             child: SafeArea(
               child: Padding(
@@ -90,14 +89,14 @@ class _DetailMateriStudentState extends State<DetailMateriStudent> {
                       widget.materi.isiMateri,
                       style: const TextStyle(
                         fontSize: 16,
-                        height: 1.6, // Spasi antar baris agar enak dibaca
+                        height: 1.6,
                         color: Colors.black87,
                       ),
                       textAlign: TextAlign.justify,
                     ),
                   ),
                   
-                  const SizedBox(height: 100), // Spasi kosong di bawah agar tidak tertutup tombol
+                  const SizedBox(height: 100),
                 ],
               ),
             ),

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../controllers/auth_controller.dart';
 import '../../models/user_model.dart';
-
-// Import halaman tujuan (Nanti kita buat file dummy-nya di bawah)
 import '../admin/dashboard_admin.dart';
 import '../student/home_student.dart';
 
@@ -14,16 +12,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // 1. Panggil Controller
   final AuthController _authController = AuthController();
-  
-  // 2. Controller untuk Form Input (Admin)
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
 
-  // 3. State untuk UI
-  bool _isAdminMode = false; // Default false (Tampilan Siswa)
-  bool _isLoading = false;   // Untuk efek loading muter-muter
+  bool _isAdminMode = false;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -35,13 +29,11 @@ class _LoginPageState extends State<LoginPage> {
   // --- FUNGSI NAVIGASI ---
   void _navigateBasedOnRole(UserModel user) {
     if (user.role == 'admin') {
-      // Pindah ke Dashboard Admin (Hapus tombol back)
       Navigator.pushReplacement(
         context, 
         MaterialPageRoute(builder: (context) => const DashboardAdmin()),
       );
     } else {
-      // Pindah ke Home Siswa (Hapus tombol back)
       Navigator.pushReplacement(
         context, 
         MaterialPageRoute(builder: (context) => const HomeStudent()),
@@ -71,11 +63,11 @@ class _LoginPageState extends State<LoginPage> {
 
               // --- LOGIC TAMPILAN (SISWA vs ADMIN) ---
               if (_isLoading) 
-                const CircularProgressIndicator() // Tampilkan loading jika sedang proses
+                const CircularProgressIndicator()
               else if (!_isAdminMode) 
-                _buildStudentView() // Tampilan Default (Siswa)
+                _buildStudentView()
               else 
-                _buildAdminView(),  // Tampilan Admin (Form)
+                _buildAdminView(),
               
             ],
           ),
@@ -107,13 +99,9 @@ class _LoginPageState extends State<LoginPage> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             ),
             onPressed: () async {
-              setState(() => _isLoading = true); // Mulai Loading
-              
-              // Panggil Controller
+              setState(() => _isLoading = true);
               UserModel? user = await _authController.loginWithGoogle(context);
-
-              setState(() => _isLoading = false); // Stop Loading
-
+              setState(() => _isLoading = false);
               if (user != null) {
                 _navigateBasedOnRole(user);
               }
@@ -126,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
         TextButton(
           onPressed: () {
             setState(() {
-              _isAdminMode = true; // Ganti ke Mode Admin
+              _isAdminMode = true;
               _emailController.clear();
               _passController.clear();
             });
@@ -179,7 +167,6 @@ class _LoginPageState extends State<LoginPage> {
             onPressed: () async {
               setState(() => _isLoading = true);
 
-              // Panggil Controller
               UserModel? user = await _authController.loginAdmin(
                 _emailController.text.trim(), 
                 _passController.text.trim(), 
@@ -198,7 +185,7 @@ class _LoginPageState extends State<LoginPage> {
 
         const SizedBox(height: 20),
         TextButton(
-          onPressed: () => setState(() => _isAdminMode = false), // Kembali ke Mode Siswa
+          onPressed: () => setState(() => _isAdminMode = false),
           child: const Text("Batal (Kembali ke Siswa)"),
         ),
       ],

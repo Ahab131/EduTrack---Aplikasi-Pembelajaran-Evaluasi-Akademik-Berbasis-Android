@@ -87,9 +87,7 @@ class _HistoryScorePageState extends State<HistoryScorePage> {
   }
 
   Widget _buildHistoryCard(NilaiModel nilai) {
-    // Format Tanggal (misal: 12 Okt 2023, 10:30)
-    // Jika error, pastikan pubspec.yaml ada dependencies: intl: ^0.18.0
-    // Atau gunakan .toString() sederhana jika tidak ingin pakai intl
+    
     String formattedDate = DateFormat('dd MMM yyyy, HH:mm').format(nilai.tanggal);
 
     // Warna skor: Hijau jika >= 70, Merah jika < 70

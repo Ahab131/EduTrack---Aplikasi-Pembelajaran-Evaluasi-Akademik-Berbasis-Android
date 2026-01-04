@@ -7,7 +7,7 @@ class SubjectController {
   // 1. GET: Ambil Mapel berdasarkan Kelas ID (Filter)
   Stream<List<MapelModel>> getSubjectsByClass(String kelasId) {
     return subjectCollection
-        .where('kelas_id', isEqualTo: kelasId) // Filter data
+        .where('kelas_id', isEqualTo: kelasId)
         .snapshots()
         .map((snapshot) {
       return snapshot.docs.map((doc) {
@@ -21,7 +21,7 @@ class SubjectController {
     await subjectCollection.add({
       'nama_mapel': nama,
       'kategori': kategori,
-      'kelas_id': kelasId, // Relasi ke Parent (Kelas)
+      'kelas_id': kelasId,
       'created_at': FieldValue.serverTimestamp(),
     });
   }

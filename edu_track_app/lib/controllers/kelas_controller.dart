@@ -2,16 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/akademik_model.dart';
 
 class ClassController {
-  // Referensi ke koleksi 'kelas' di Firestore
   final CollectionReference classCollection = FirebaseFirestore.instance
       .collection('kelas');
 
-  // 1. GET: Mengambil data real-time (Stream)
+  // 1. GET: Mengambil data kelas
   Stream<List<KelasModel>> getClasses() {
-    return classCollection.orderBy('urutan', descending: true).snapshots().map(
+    return classCollection.orderBy('urutan', descending: false).snapshots().map(
       (snapshot) {
         return snapshot.docs.map((doc) {
-          // Konversi dari dokumen Firestore ke Object KelasModel
           return KelasModel.fromMap(doc.data() as Map<String, dynamic>, doc.id);
         }).toList();
       },
@@ -28,13 +26,12 @@ class ClassController {
         'created_at': FieldValue.serverTimestamp(),
       });
     } catch (e) {
-      // Handle error jika perlu
       print("Error adding class: $e");
       rethrow;
     }
   }
 
-  // 3. UPDATE: Edit Data Kelas (BARU)
+  // 3. UPDATE: Edit Data Kelas
   Future<void> updateClass(
     String docId,
     String nama,
@@ -46,11 +43,11 @@ class ClassController {
       'deskripsi': deskripsi,
       'urutan': urutan,
       'updated_at':
-          FieldValue.serverTimestamp(), // Opsional: catat waktu update
+          FieldValue.serverTimestamp(),
     });
   }
 
-  // 4. DELETE: Hapus Kelas (UPDATE)
+  // 4. DELETE: Hapus Kelas
   Future<void> deleteClass(String docId) async {
     await classCollection.doc(docId).delete();
   }
