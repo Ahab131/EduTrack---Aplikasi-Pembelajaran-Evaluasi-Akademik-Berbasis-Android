@@ -13,7 +13,7 @@ class StudentMaterialPage extends StatefulWidget {
 }
 
 class _StudentMaterialPageState extends State<StudentMaterialPage> {
-  final Color headerColor = const Color(0xFF001144); // Warna Biru Gelap
+  final Color headerColor = const Color(0xFF001144);
   final MaterialController _materialController = MaterialController();
 
   @override
@@ -28,7 +28,6 @@ class _StudentMaterialPageState extends State<StudentMaterialPage> {
             width: double.infinity,
             decoration: BoxDecoration(
               color: headerColor,
-              // Tanpa borderRadius (Kotak)
             ),
             child: SafeArea(
               child: Padding(
@@ -59,7 +58,7 @@ class _StudentMaterialPageState extends State<StudentMaterialPage> {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            widget.mapel.namaMapel, // Menampilkan Mapel (misal: Matematika)
+                            widget.mapel.namaMapel,
                             style: const TextStyle(
                               fontSize: 14,
                               color: Colors.white70,
@@ -87,7 +86,7 @@ class _StudentMaterialPageState extends State<StudentMaterialPage> {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                // 2. Kosong
+                // 2. Materi Belum Ada
                 if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   return Center(
                     child: Column(
@@ -104,7 +103,7 @@ class _StudentMaterialPageState extends State<StudentMaterialPage> {
                   );
                 }
 
-                // 3. Ada Data
+                // 3. Ada Data Materi
                 final materials = snapshot.data!;
                 return ListView.builder(
                   padding: const EdgeInsets.all(16),
@@ -144,7 +143,6 @@ class _StudentMaterialPageState extends State<StudentMaterialPage> {
             MaterialPageRoute(builder: (_) => DetailMateriStudent(materi: materi)),
           );
         },
-        // Icon di Kiri
         leading: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
@@ -153,17 +151,18 @@ class _StudentMaterialPageState extends State<StudentMaterialPage> {
           ),
           child: const Icon(Icons.article, color: Colors.indigo),
         ),
+
         // Judul Materi
         title: Text(
           materi.judul,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
-        // Preview Isi (sedikit)
+
+        // Preview Isi Materi
         subtitle: Text(
           "Klik untuk membaca & kuis",
           style: TextStyle(color: Colors.grey[600], fontSize: 12),
         ),
-        // Panah
         trailing: const Icon(Icons.chevron_right, color: Colors.grey),
       ),
     );

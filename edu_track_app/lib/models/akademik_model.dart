@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class KelasModel {
   final String id;
-  final String namaKelas; // Contoh: "Kelas 6 SD"
-  final String deskripsi; // Contoh: "Tahun Ajaran 2023/2024"
-  final int urutan; // Untuk sorting, misal kelas 1 dulu baru kelas 2
+  final String namaKelas;
+  final String deskripsi;
+  final int urutan;
 
   KelasModel({
     required this.id,
@@ -13,7 +13,6 @@ class KelasModel {
     required this.urutan,
   });
 
-  // Konversi dari Firestore ke Dart Object
   factory KelasModel.fromMap(Map<String, dynamic> data, String documentId) {
     return KelasModel(
       id: documentId,
@@ -23,7 +22,6 @@ class KelasModel {
     );
   }
 
-  // Konversi dari Dart Object ke Firestore
   Map<String, dynamic> toMap() {
     return {
       'nama_kelas': namaKelas,
@@ -35,9 +33,9 @@ class KelasModel {
 
 class MapelModel {
   final String id;
-  final String namaMapel; // Contoh: "Matematika"
-  final String kategori;  // Contoh: "Eksakta", "Bahasa"
-  final String kelasId;   // Foreign Key: Mapel ini milik kelas mana
+  final String namaMapel;
+  final String kategori;
+  final String kelasId; 
 
   MapelModel({
     required this.id,
@@ -66,9 +64,9 @@ class MapelModel {
 
 class MateriModel {
   final String id;
-  final String judul;      // Judul Materi, misal "Perkalian Dasar"
-  final String isiMateri;  // Bisa berupa teks panjang atau link PDF/Video
-  final String mapelId;    // Relasi ke Mata Pelajaran
+  final String judul;
+  final String isiMateri;
+  final String mapelId;
 
   MateriModel({
     required this.id,
@@ -102,8 +100,8 @@ class SoalModel {
   final String pilihanB;
   final String pilihanC;
   final String pilihanD;
-  final String kunciJawaban; // Contoh: 'A', 'B', 'C', atau 'D'
-  final String materiId;     // Relasi ke Materi
+  final String kunciJawaban;
+  final String materiId;
 
   SoalModel({
     required this.id,
@@ -144,11 +142,11 @@ class SoalModel {
 
 class NilaiModel {
   final String id;
-  final String siswaId;    // ID Siswa yang mengerjakan
-  final String materiId;   // ID Materi
-  final String judulMateri; // Nama Materi (disimpan biar tidak perlu query ulang)
-  final int nilai;         // Skor (0-100)
-  final DateTime tanggal;  // Waktu pengerjaan
+  final String siswaId;
+  final String materiId;
+  final String judulMateri;
+  final int nilai;
+  final DateTime tanggal; 
 
   NilaiModel({
     required this.id,

@@ -2,10 +2,11 @@ class UserModel {
   final String uid;
   final String email;
   final String nama;
-  final String role; // 'admin', 'pelajar', 'guru'
+  final String role;
   final String? fotoUrl;
-  final String? kelas; // <--- TAMBAHAN BARU
-  final String? noHp;  // <--- TAMBAHAN BARU
+  final String? kelas;
+  final String? noHp;
+  final String? tglLahir;
 
   UserModel({
     required this.uid,
@@ -15,22 +16,22 @@ class UserModel {
     this.fotoUrl,
     this.kelas,
     this.noHp,
+    this.tglLahir,
   });
 
-  // Konversi dari Firestore ke Model
   factory UserModel.fromMap(Map<String, dynamic> data) {
     return UserModel(
       uid: data['uid'] ?? '',
       email: data['email'] ?? '',
-      nama: data['nama_lengkap'] ?? '', // Pastikan key-nya 'nama_lengkap' sesuai database
+      nama: data['nama_lengkap'] ?? '',
       role: data['role'] ?? 'pelajar',
       fotoUrl: data['foto_url'],
-      kelas: data['kelas'], // <--- BACA DARI DB
-      noHp: data['no_hp'],  // <--- BACA DARI DB
+      kelas: data['kelas'],
+      noHp: data['no_hp'],
+      tglLahir: data['tgl_lahir'],
     );
   }
 
-  // Konversi dari Model ke Firestore
   Map<String, dynamic> toMap() {
     return {
       'uid': uid,
@@ -38,8 +39,10 @@ class UserModel {
       'nama_lengkap': nama,
       'role': role,
       'foto_url': fotoUrl,
-      'kelas': kelas, // <--- SIMPAN KE DB
-      'no_hp': noHp,  // <--- SIMPAN KE DB
+      'kelas': kelas,
+      'no_hp': noHp,
+      'tgl_lahir': tglLahir,
+      'updated_at': DateTime.now(),
     };
   }
 }
