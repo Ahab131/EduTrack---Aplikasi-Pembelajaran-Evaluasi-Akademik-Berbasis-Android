@@ -129,7 +129,7 @@ class _QuizStudentPageState extends State<QuizStudentPage> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha:0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -172,7 +172,7 @@ class _QuizStudentPageState extends State<QuizStudentPage> {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         decoration: BoxDecoration(
-          color: isSelected ? headerColor.withOpacity(0.1) : Colors.white,
+          color: isSelected ? headerColor.withValues(alpha:0.1) : Colors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected ? headerColor : Colors.transparent,
@@ -180,7 +180,7 @@ class _QuizStudentPageState extends State<QuizStudentPage> {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.02),
+              color: Colors.black.withValues(alpha:0.02),
               blurRadius: 5,
               offset: const Offset(0, 2),
             ),

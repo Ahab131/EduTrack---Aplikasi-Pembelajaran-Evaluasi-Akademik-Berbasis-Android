@@ -129,7 +129,7 @@ class _StudentMaterialPageState extends State<StudentMaterialPage> {
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha:0.05),
             blurRadius: 5,
             offset: const Offset(0, 2),
           ),
@@ -146,7 +146,7 @@ class _StudentMaterialPageState extends State<StudentMaterialPage> {
         leading: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: Colors.indigo.withOpacity(0.1),
+            color: Colors.indigo.withValues(alpha:0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: const Icon(Icons.article, color: Colors.indigo),
