@@ -10,7 +10,11 @@ class AuthController {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   // --- FUNGSI 1: LOGIN ADMIN (Email & Password) ---
-  Future<UserModel?> loginAdmin(String email, String password, BuildContext context) async {
+  Future<UserModel?> loginAdmin(
+    String email,
+    String password,
+    BuildContext context,
+  ) async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
@@ -19,29 +23,48 @@ class AuthController {
       User? firebaseUser = userCredential.user;
 
       if (firebaseUser != null) {
-        DocumentSnapshot doc = await _firestore.collection('users').doc(firebaseUser.uid).get();
+        DocumentSnapshot doc = await _firestore
+            .collection('users')
+            .doc(firebaseUser.uid)
+            .get();
 
         if (doc.exists) {
-          UserModel userModel = UserModel.fromMap(doc.data() as Map<String, dynamic>);
+          UserModel userModel = UserModel.fromMap(
+            doc.data() as Map<String, dynamic>,
+          );
+
           if (userModel.role == 'admin') {
             return userModel;
           } else {
             await _auth.signOut();
-            _showError(context, 'Akun ini bukan Admin!');
+
+            if (context.mounted) {
+              _showError(context, 'Akun ini bukan Admin!');
+            }
             return null;
           }
         } else {
-          _showError(context, 'Data user tidak ditemukan di database.');
+          if (context.mounted) {
+            _showError(context, 'Data user tidak ditemukan di database.');
+          }
           return null;
         }
       }
     } on FirebaseAuthException catch (e) {
       String message = 'Terjadi kesalahan.';
-      if (e.code == 'user-not-found') message = 'Email tidak terdaftar.';
-      else if (e.code == 'wrong-password') message = 'Password salah.';
-      _showError(context, message);
+      if (e.code == 'user-not-found') {
+        message = 'Email tidak terdaftar.';
+      } else if (e.code == 'wrong-password') {
+        message = 'Password salah.';
+      }
+
+      if (context.mounted) {
+        _showError(context, message);
+      }
     } catch (e) {
-      _showError(context, 'Error: $e');
+      if (context.mounted) {
+        _showError(context, 'Error: $e');
+      }
     }
     return null;
   }
@@ -50,18 +73,30 @@ class AuthController {
   Future<UserModel?> loginWithGoogle(BuildContext context) async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) return null; 
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      if (googleUser == null) {
+        return null;
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      UserCredential userCredential = await _auth.signInWithCredential(credential);
+      UserCredential userCredential = await _auth.signInWithCredential(
+        credential,
+      );
       User? firebaseUser = userCredential.user;
+
       if (firebaseUser != null) {
-        DocumentSnapshot doc = await _firestore.collection('users').doc(firebaseUser.uid).get();
+        DocumentSnapshot doc = await _firestore
+            .collection('users')
+            .doc(firebaseUser.uid)
+            .get();
+
         UserModel finalUser;
+
         if (doc.exists) {
           finalUser = UserModel.fromMap(doc.data() as Map<String, dynamic>);
         } else {
@@ -72,6 +107,7 @@ class AuthController {
             role: 'pelajar',
             fotoUrl: firebaseUser.photoURL,
           );
+
           await _firestore.collection('users').doc(firebaseUser.uid).set({
             'uid': finalUser.uid,
             'email': finalUser.email,
@@ -81,10 +117,13 @@ class AuthController {
             'created_at': FieldValue.serverTimestamp(),
           });
         }
-        return finalUser; 
+
+        return finalUser;
       }
     } catch (e) {
-      _showError(context, 'Gagal Login Google: $e');
+      if (context.mounted) {
+        _showError(context, 'Gagal Login Google: $e');
+      }
     }
     return null;
   }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/akademik_model.dart';
+import 'dart:developer';
 
 class ClassController {
   final CollectionReference classCollection = FirebaseFirestore.instance
@@ -26,7 +27,7 @@ class ClassController {
         'created_at': FieldValue.serverTimestamp(),
       });
     } catch (e) {
-      print("Error adding class: $e");
+      log("Error Login: $e");
       rethrow;
     }
   }

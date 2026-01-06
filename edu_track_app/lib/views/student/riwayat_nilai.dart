@@ -100,7 +100,7 @@ class _HistoryScorePageState extends State<HistoryScorePage> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha:0.05),
             blurRadius: 5,
             offset: const Offset(0, 2),
           ),
@@ -111,7 +111,7 @@ class _HistoryScorePageState extends State<HistoryScorePage> {
         leading: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.blue.withOpacity(0.1),
+            color: Colors.blue.withValues(alpha: 0.1),
             shape: BoxShape.circle,
           ),
           child: const Icon(Icons.assignment_turned_in, color: Colors.blue),
@@ -127,7 +127,7 @@ class _HistoryScorePageState extends State<HistoryScorePage> {
         trailing: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: scoreColor.withOpacity(0.1),
+            color: scoreColor.withValues(alpha:0.1),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(color: scoreColor, width: 1),
           ),
