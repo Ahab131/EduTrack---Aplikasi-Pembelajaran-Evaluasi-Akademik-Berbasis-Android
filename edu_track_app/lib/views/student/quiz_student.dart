@@ -27,53 +27,97 @@ class _QuizStudentPageState extends State<QuizStudentPage> {
   // List soal
   List<SoalModel> _questions = [];
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[200],
-      body: StreamBuilder<List<SoalModel>>(
-        stream: _questionController.getQuestionsByMaterial(widget.materi.id),
-        builder: (context, snapshot) {
-          // 1. Loading
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          // 2. Data Kosong
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return _buildEmptyState();
-          }
-
-          // 3. Ada Data Soal
-          if (_questions.isEmpty) {
-            _questions = snapshot.data!;
-          }
-
-          // Jika Kuis Selesai, Tampilkan Hasil
-          if (_isFinished) {
-            return _buildResultScreen();
-          }
-
-          // Tampilkan Soal
-          return Column(
-            children: [
-              _buildHeader(),
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      _buildQuestionCard(_questions[_currentIndex]),
-                      const SizedBox(height: 20),
-                      _buildOptions(_questions[_currentIndex]),
-                    ],
-                  ),
+  // --- LOGIKA KONFIRMASI KELUAR ---
+  Future<bool> _showExitConfirmation() async {
+    return await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text("Batal Mengerjakan?"),
+            content: const Text(
+              "Progres Anda akan hilang jika keluar sekarang. Yakin ingin keluar?",
+            ),
+            actions: [
+              TextButton(
+                onPressed: () =>
+                    Navigator.of(context).pop(false), // Tidak jadi keluar
+                child: const Text("Lanjut Mengerjakan"),
+              ),
+              TextButton(
+                onPressed: () =>
+                    Navigator.of(context).pop(true), // Yakin keluar
+                child: const Text(
+                  "Keluar",
+                  style: TextStyle(color: Colors.red),
                 ),
               ),
-              _buildBottomButton(),
             ],
-          );
-        },
+          ),
+        ) ??
+        false; // Default false jika dialog ditutup paksa
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PopScope(
+      // Izinkan keluar langsung HANYA jika kuis sudah selesai (_isFinished)
+      // Jika belum selesai, canPop = false (blokir keluar langsung)
+      canPop: _isFinished,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop)
+          return; // Jika sudah berhasil keluar (karena _isFinished true), biarkan
+
+        // Jika belum selesai, panggil dialog konfirmasi
+        final bool shouldExit = await _showExitConfirmation();
+        if (shouldExit && context.mounted) {
+          Navigator.pop(context); // Keluar manual jika user pilih "Ya"
+        }
+      },
+      child: Scaffold(
+        backgroundColor: Colors.grey[200],
+        body: StreamBuilder<List<SoalModel>>(
+          stream: _questionController.getQuestionsByMaterial(widget.materi.id),
+          builder: (context, snapshot) {
+            // 1. Loading
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            // 2. Data Kosong
+            if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return _buildEmptyState();
+            }
+
+            // 3. Ada Data Soal
+            if (_questions.isEmpty) {
+              _questions = snapshot.data!;
+            }
+
+            // Jika Kuis Selesai, Tampilkan Hasil
+            if (_isFinished) {
+              return _buildResultScreen();
+            }
+
+            // Tampilkan Soal
+            return Column(
+              children: [
+                _buildHeader(),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      children: [
+                        _buildQuestionCard(_questions[_currentIndex]),
+                        const SizedBox(height: 20),
+                        _buildOptions(_questions[_currentIndex]),
+                      ],
+                    ),
+                  ),
+                ),
+                _buildBottomButton(),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -91,9 +135,16 @@ class _QuizStudentPageState extends State<QuizStudentPage> {
             children: [
               IconButton(
                 icon: const Icon(Icons.close, color: Colors.white),
-                onPressed: () => Navigator.pop(context),
+                onPressed: () async {
+                  // Cek konfirmasi dulu sebelum keluar
+                  final bool shouldExit = await _showExitConfirmation();
+                  if (shouldExit && context.mounted) {
+                    Navigator.pop(context);
+                  }
+                },
               ),
               const SizedBox(width: 10),
+              // ... (kode Text judul tetap sama)
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,7 +180,7 @@ class _QuizStudentPageState extends State<QuizStudentPage> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha:0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -172,7 +223,7 @@ class _QuizStudentPageState extends State<QuizStudentPage> {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         decoration: BoxDecoration(
-          color: isSelected ? headerColor.withValues(alpha:0.1) : Colors.white,
+          color: isSelected ? headerColor.withValues(alpha: 0.1) : Colors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected ? headerColor : Colors.transparent,
@@ -180,7 +231,7 @@ class _QuizStudentPageState extends State<QuizStudentPage> {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha:0.02),
+              color: Colors.black.withValues(alpha: 0.02),
               blurRadius: 5,
               offset: const Offset(0, 2),
             ),
@@ -289,7 +340,6 @@ class _QuizStudentPageState extends State<QuizStudentPage> {
 
   // --- TAMPILAN HASIL SKOR ---
   Widget _buildResultScreen() {
-
     double finalScore = (_score / _questions.length) * 100;
 
     return Scaffold(
@@ -337,8 +387,7 @@ class _QuizStudentPageState extends State<QuizStudentPage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  onPressed: () =>
-                      Navigator.pop(context),
+                  onPressed: () => Navigator.pop(context),
                   child: const Text(
                     "Kembali ke Materi",
                     style: TextStyle(color: Colors.white),
